@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CivicEvents</title>
+    <link rel="icon" type="image/svg+xml" href="assets/civicevents-icon.svg">
+    <noscript><meta http-equiv="refresh" content="0; url=login.html"></noscript>
+</head>
+<body>
+    <p style="font-family: sans-serif; padding: 2rem;">Loading CivicEvents… <a href="login.html">Continue to sign in</a></p>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Entry point: signed in -> role home (admin dashboard / events), otherwise -> login
+        location.replace(Auth.isLoggedIn() ? Auth.homeUrl() : 'login.html');
+    </script>
+</body>
+</html>
