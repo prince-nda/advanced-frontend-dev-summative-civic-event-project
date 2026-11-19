@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Events | CivicEvents</title>
+    <link rel="icon" type="image/svg+xml" href="assets/civicevents-icon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script src="js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="min-h-screen bg-white font-sans text-navy">
+    <div id="app-header"></div>
+
+    <main id="main" class="mx-auto max-w-7xl px-4 pt-10 sm:px-6">
+        <div class="flex flex-wrap items-end justify-between gap-4">
+            <div>
+                <p class="text-xs font-bold uppercase tracking-[0.16em] text-action">Explore what's happening</p>
+                <h1 class="mt-2 text-4xl font-extrabold tracking-tight sm:text-5xl">Events around the city</h1>
+            </div>
+            <!-- Admin only: shown by events.js for admins -->
+            <a id="create-event" href="event-form.html" class="hidden rounded-xl bg-action px-5 py-3 text-sm font-bold text-white shadow-glow hover:bg-action-dark">+ Create event</a>
+        </div>
+
+        <!-- Filters -->
+        <form id="filters" class="mt-8 grid gap-4 rounded-2xl border border-line bg-surface p-4 sm:grid-cols-2 lg:grid-cols-4" role="search" aria-label="Filter events">
+            <div>
+                <label for="f-q" class="mb-1.5 block text-xs font-bold uppercase tracking-wide text-muted">Search</label>
+                <input id="f-q" type="search" placeholder="Title or description"
+                       class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm outline-none focus:border-action focus:ring-4 focus:ring-brand/20">
+            </div>
+            <div>
+                <label for="f-when" class="mb-1.5 block text-xs font-bold uppercase tracking-wide text-muted">When</label>
+                <select id="f-when" class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm outline-none focus:border-action focus:ring-4 focus:ring-brand/20">
+                    <option value="upcoming">Upcoming</option>
+                    <option value="all">All dates</option>
+                    <option value="past">Past</option>
+                </select>
+            </div>
+            <div>
+                <label for="f-date" class="mb-1.5 block text-xs font-bold uppercase tracking-wide text-muted">On a specific day</label>
+                <input id="f-date" type="date"
+                       class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm outline-none focus:border-action focus:ring-4 focus:ring-brand/20">
+            </div>
+            <div>
+                <label for="f-location" class="mb-1.5 block text-xs font-bold uppercase tracking-wide text-muted">Location</label>
+                <select id="f-location" class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm outline-none focus:border-action focus:ring-4 focus:ring-brand/20">
+                    <option value="">All locations</option>
+                </select>
+            </div>
+        </form>
+
+        <p id="result-count" class="mt-6 text-sm font-semibold text-muted" aria-live="polite"></p>
+
+        <!-- List / states -->
+        <section id="events-grid" class="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" aria-label="Events"></section>
+        <div id="state" class="hidden"></div>
+
+        <nav id="pagination" class="mt-10 flex flex-wrap items-center justify-center gap-2" aria-label="Pagination"></nav>
+    </main>
+
+    <div id="app-footer"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/layout.js"></script>
+    <script src="js/pages/events.js"></script>
+</body>
+</html>
