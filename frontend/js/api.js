@@ -23,8 +23,9 @@ const Api = (() => {
      * @param {string}  o.path    e.g. '/events' (the /api prefix is added for you)
      * @param {Object|FormData} [o.data]  plain object -> JSON body (or query string for GET); FormData -> multipart upload
      * @param {boolean} [o.auth=true]  false for login/signup
+     * @param {function} [o.onProgress]  called with 0..1 while a file uploads
      */
-    function request({ method = 'GET', path, data, auth = true }) {
+    function request({ method = 'GET', path, data, auth = true, onProgress }) {
         return new Promise((resolve, reject) => {
             const headers = {};
 
@@ -51,6 +52,17 @@ const Api = (() => {
             } else if (data) {
                 opts.data = JSON.stringify(data);
                 opts.contentType = 'application/json';
+            }
+
+            if (onProgress) {
+                // Report upload progress (used by the file upload forms)
+                opts.xhr = function () {
+                    const xhr = $.ajaxSettings.xhr();
+                    if (xhr.upload) {
+                        xhr.upload.addEventListener('progress', (e) => { if (e.lengthComputable) onProgress(e.loaded / e.total); });
+                    }
+                    return xhr;
+                };
             }
 
             $.ajax(opts)
@@ -94,8 +106,8 @@ const Api = (() => {
         events: {                                  // create/update/remove are admin-only; FormData fields: title, description, location, starts_at, ends_at, image
             list: () => get('/events'),            // no server-side search, filters or pagination: do those in the browser
             get: (id) => get(`/events/${id}`),
-            create: (formData) => post('/events', formData),
-            update: (id, formData) => put(`/events/${id}`, formData),
+            create: (formData, onProgress) => request({ method: 'POST', path: '/events', data: formData, onProgress }),
+            update: (id, formData, onProgress) => request({ method: 'PUT', path: `/events/${id}`, data: formData, onProgress }),
             remove: (id) => del(`/events/${id}`),
         },
 
@@ -116,8 +128,8 @@ const Api = (() => {
         announcements: {                           // FormData: title, audio, published
             list: () => get('/announcements'),     // returns unpublished too: filter published in the browser for normal users
             get: (id) => get(`/announcements/${id}`),
-            create: (formData) => post('/announcements', formData),
-            update: (id, formData) => put(`/announcements/${id}`, formData),
+            create: (formData, onProgress) => request({ method: 'POST', path: '/announcements', data: formData, onProgress }),
+            update: (id, formData, onProgress) => request({ method: 'PUT', path: `/announcements/${id}`, data: formData, onProgress }),
             publish: (id) => patch(`/announcements/${id}/publish`),
             unpublish: (id) => patch(`/announcements/${id}/unpublish`),
             remove: (id) => del(`/announcements/${id}`),
@@ -126,8 +138,8 @@ const Api = (() => {
         promos: {                                  // FormData: title, description, caption_text, video
             list: (page = 1, limit = 20) => get('/promos', { page, limit }), // { data, pagination }
             get: (id) => get(`/promos/${id}`),
-            create: (formData) => post('/promos', formData),
-            update: (id, formData) => put(`/promos/${id}`, formData),
+            create: (formData, onProgress) => request({ method: 'POST', path: '/promos', data: formData, onProgress }),
+            update: (id, formData, onProgress) => request({ method: 'PUT', path: `/promos/${id}`, data: formData, onProgress }),
             publish: (id) => patch(`/promos/${id}/publish`),
             unpublish: (id) => patch(`/promos/${id}/unpublish`),
             remove: (id) => del(`/promos/${id}`),
