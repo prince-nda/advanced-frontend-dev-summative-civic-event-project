@@ -58,5 +58,69 @@ const Ui = (() => {
         else $el.text('').addClass('hidden');
     }
 
-    return { toast, showFlash, setLoading, formError };
+    // Escape text before putting API data into HTML strings (prevents XSS)
+    function esc(value) {
+        return String(value == null ? '' : value)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function fmtDateTime(iso) {
+        if (!iso) return 'Date to be announced';
+        const d = new Date(iso);
+        if (isNaN(d)) return 'Date to be announced';
+        return new Intl.DateTimeFormat(undefined, {
+            weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit',
+        }).format(d);
+    }
+
+    function timeAgo(iso) {
+        const secs = Math.round((Date.now() - new Date(iso).getTime()) / 1000);
+        if (isNaN(secs)) return '';
+        if (secs < 60) return 'Just now';
+        const units = [['day', 86400], ['hour', 3600], ['minute', 60]];
+        for (const [name, size] of units) {
+            if (secs >= size) { const n = Math.floor(secs / size); return `${n} ${name}${n > 1 ? 's' : ''} ago`; }
+        }
+        return '';
+    }
+
+    // Accessible confirmation dialog (native <dialog>); resolves true when confirmed
+    function confirmDialog({ title, message, confirmText = 'Delete' }) {
+        return new Promise((resolve) => {
+            const $d = $(
+                `<dialog class="w-[calc(100%-2rem)] max-w-md rounded-2xl p-0 shadow-card backdrop:bg-navy/60" aria-labelledby="dlg-title">
+                    <form method="dialog" class="p-6">
+                        <h2 id="dlg-title" class="text-lg font-extrabold text-navy"></h2>
+                        <p class="mt-2 text-sm text-muted"></p>
+                        <div class="mt-6 flex justify-end gap-3">
+                            <button value="cancel" class="rounded-xl border border-line px-4 py-2.5 text-sm font-bold text-navy hover:bg-surface">Cancel</button>
+                            <button value="ok" class="rounded-xl bg-action px-4 py-2.5 text-sm font-bold text-white hover:bg-action-dark"></button>
+                        </div>
+                    </form>
+                </dialog>`
+            );
+            $d.find('h2').text(title);
+            $d.find('p').text(message);
+            $d.find('button[value="ok"]').text(confirmText);
+            $('body').append($d);
+            const el = $d[0];
+            el.addEventListener('close', () => { resolve(el.returnValue === 'ok'); $d.remove(); });
+            el.showModal();
+        });
+    }
+
+    // 83 -> "1:23" (used for audio length)
+    function fmtDuration(sec) {
+        if (!isFinite(sec)) return '--:--';
+        const m = Math.floor(sec / 60), s = Math.floor(sec % 60);
+        return m + ':' + String(s).padStart(2, '0');
+    }
+
+    function fmtDate(iso) {
+        const d = new Date(iso);
+        return isNaN(d) ? '' : new Intl.DateTimeFormat(undefined, { year: 'numeric', month: 'short', day: 'numeric' }).format(d);
+    }
+
+    return { toast, showFlash, setLoading, formError, esc, fmtDateTime, fmtDate, fmtDuration, timeAgo, confirm: confirmDialog };
 })();
