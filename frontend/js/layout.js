@@ -30,7 +30,7 @@ const Layout = (() => {
         // Admin-only links: not rendered at all for normal users
         if (Auth.isAdmin()) {
             items.push(['admin/dashboard.html', 'Dashboard', 'dashboard']);
-            items.push(['admin/events.html', 'Admin', 'admin']);
+            items.push(['admin/users.html', 'Admin', 'admin']);
         }
         return items.map(([href, label, key]) => {
             const on = key === activeKey;
@@ -75,14 +75,14 @@ const Layout = (() => {
                 <div class="relative">
                     <button id="profile-btn" type="button" aria-expanded="false" aria-controls="profile-menu" aria-haspopup="true"
                             class="flex items-center gap-2 rounded-full py-1 pl-1 pr-2 hover:bg-white/10 sm:pr-3">
-                        <span class="flex h-8 w-8 items-center justify-center rounded-full bg-brand text-xs font-extrabold text-navy" aria-hidden="true">${Ui.esc(initials(user.full_name))}</span>
-                        <span class="hidden text-sm font-semibold sm:inline">${Ui.esc((user.full_name || '').split(' ')[0])}</span>
+                        <span id="nav-initials" class="flex h-8 w-8 items-center justify-center rounded-full bg-brand text-xs font-extrabold text-navy" aria-hidden="true">${Ui.esc(initials(user.full_name))}</span>
+                        <span id="nav-name" class="hidden text-sm font-semibold sm:inline">${Ui.esc((user.full_name || '').split(' ')[0])}</span>
                         <span class="sr-only">Account menu</span>
                     </button>
                     <div id="profile-menu" class="absolute right-0 mt-2 hidden w-64 rounded-xl bg-white p-2 text-navy shadow-card ring-1 ring-line">
                         <div class="px-3 py-2">
-                            <p class="truncate text-sm font-extrabold">${Ui.esc(user.full_name)}</p>
-                            <p class="truncate text-xs text-muted">${Ui.esc(user.email)}</p>
+                            <p id="menu-name" class="truncate text-sm font-extrabold">${Ui.esc(user.full_name)}</p>
+                            <p id="menu-email" class="truncate text-xs text-muted">${Ui.esc(user.email)}</p>
                             <p class="mt-1 inline-block rounded-full bg-tint px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-action-dark">${Ui.esc(user.role)}</p>
                         </div>
                         <hr class="my-1 border-line">
@@ -335,5 +335,14 @@ const Layout = (() => {
         loadNotifs(false); // fills the bell badge
     }
 
-    return { mount };
+    // Update the name/email shown in the navbar after a profile edit (without re-mounting the whole layout)
+    function refreshUser() {
+        const user = me();
+        $('#nav-initials').text(initials(user.full_name));
+        $('#nav-name').text((user.full_name || '').split(' ')[0]);
+        $('#menu-name').text(user.full_name);
+        $('#menu-email').text(user.email);
+    }
+
+    return { mount, refreshUser };
 })();
