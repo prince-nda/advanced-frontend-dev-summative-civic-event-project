@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>User management | CivicEvents Admin</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/civicevents-icon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script src="../js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body class="min-h-screen bg-white font-sans text-navy">
+    <div id="app-header"></div>
+
+    <div class="mx-auto flex max-w-7xl flex-col gap-6 px-4 pt-6 sm:px-6 lg:flex-row lg:gap-8 lg:pt-10">
+        <aside id="admin-nav" class="lg:w-64 lg:shrink-0"></aside>
+        <main id="main" class="min-w-0 flex-1">
+            <p class="text-xs font-bold uppercase tracking-[0.16em] text-action">Admin</p>
+            <h1 class="mt-2 text-4xl font-extrabold tracking-tight sm:text-5xl">User management</h1>
+            <p class="mt-3 text-muted">Enable or disable accounts. Roles cannot be changed from here.</p>
+
+            <form id="filters" class="mt-8 grid gap-4 rounded-2xl border border-line bg-surface p-4 sm:grid-cols-3" role="search" aria-label="Filter users">
+                <div class="sm:col-span-2">
+                    <label for="f-q" class="mb-1.5 block text-xs font-bold uppercase tracking-wide text-muted">Search</label>
+                    <input id="f-q" type="search" placeholder="Name or email" class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm outline-none focus:border-action focus:ring-4 focus:ring-brand/20">
+                </div>
+                <div>
+                    <label for="f-status" class="mb-1.5 block text-xs font-bold uppercase tracking-wide text-muted">Status</label>
+                    <select id="f-status" class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm outline-none focus:border-action focus:ring-4 focus:ring-brand/20">
+                        <option value="all">All users</option><option value="active">Active</option><option value="disabled">Disabled</option>
+                    </select>
+                </div>
+            </form>
+
+            <p id="result-count" class="mt-6 text-sm font-semibold text-muted" aria-live="polite"></p>
+            <div id="table-wrap" class="mt-3"></div>
+            <nav id="pagination" class="mt-6 flex flex-wrap items-center justify-center gap-2" aria-label="Pagination"></nav>
+
+            <dialog id="user-dialog" class="w-[calc(100%-2rem)] max-w-md rounded-2xl p-0 shadow-card backdrop:bg-navy/60" aria-labelledby="ud-h">
+                <div class="p-6" id="user-body"></div>
+            </dialog>
+        </main>
+    </div>
+
+    <div id="app-footer"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/ui.js"></script>
+    <script src="../js/layout.js"></script>
+    <script src="../js/admin-nav.js"></script>
+    <script src="../js/pages/admin/users.js"></script>
+</body>
+</html>
