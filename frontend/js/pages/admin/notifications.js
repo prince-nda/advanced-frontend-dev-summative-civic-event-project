@@ -1,15 +1,7 @@
-/**
- * Admin notification manager: list (GET /notifications), filter by type, delete (DELETE /notifications/:id).
- * The API has no endpoint to create notifications by hand: the backend creates them automatically
- * when an event, promo or announcement is added or published.
- *
- * GUARD: Auth.requireAdmin(); the backend also returns 403 on DELETE for non-admins.
- */
 $(function () {
     const user = Auth.requireAdmin();
     if (!user) return;
-    Layout.mount('admin');
-    AdminNav.mount('notifications');
+    Layout.mount('notifications');
     Ui.showFlash();
 
     let items = [];

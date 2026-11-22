@@ -1,16 +1,7 @@
-/**
- * Admin user management: list (GET /users), view one (GET /users/:id), enable / disable (PATCH).
- * There is NO role editing here, by design (admins cannot change a user's role from the UI).
- *
- * GUARD: Auth.requireAdmin(); the backend also returns 403 on every /users route for non-admins.
- * NOTE: disabling an account does not invalidate a token that is already issued; the login page
- *       blocks disabled accounts by checking is_active right after sign-in.
- */
 $(function () {
     const me = Auth.requireAdmin();
     if (!me) return;
-    Layout.mount('admin');
-    AdminNav.mount('users');
+    Layout.mount('users');
     Ui.showFlash();
 
     const PAGE_SIZE = 10;

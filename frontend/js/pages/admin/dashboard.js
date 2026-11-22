@@ -1,16 +1,7 @@
-/**
- * Admin dashboard from GET /dashboard/admin: stat cards, a new-users-per-month bar chart
- * (plain HTML + Tailwind, no chart library), and an events breakdown.
- * Updates when data changes: Refresh button plus an automatic refresh every minute.
- *
- * GUARD: Auth.requireAdmin() -> normal users are sent to the events page.
- *        The backend also answers 403 to non-admins on /dashboard/admin.
- */
 $(function () {
     const user = Auth.requireAdmin();
     if (!user) return;
     Layout.mount('dashboard');
-    AdminNav.mount('dashboard');
     Ui.showFlash();
 
     const n = (v) => Number(v) || 0; // Postgres COUNT() arrives as a string
@@ -18,10 +9,10 @@ $(function () {
     let loadedOnce = false;
 
     // Greeting + date
-    const hour = new Date().getHours();
+    const hour = Ui.hourNow(); // Rwanda time
     const part = hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening';
     $('#greeting').text(`Good ${part}, ${(user.full_name || 'Administrator').split(' ')[0]}`);
-    $('#today').text(new Intl.DateTimeFormat(undefined, { weekday: 'long', month: 'long', day: 'numeric' }).format(new Date()));
+    $('#today').text(Ui.fmtToday());
 
     /* ---------- states ---------- */
     function skeleton() {
