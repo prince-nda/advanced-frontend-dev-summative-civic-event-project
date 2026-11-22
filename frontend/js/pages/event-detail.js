@@ -71,9 +71,8 @@ $(function () {
         if (!ev.starts_at) return 'Date to be announced';
         const s = new Date(ev.starts_at), e = ev.ends_at ? new Date(ev.ends_at) : null;
         if (!e) return Ui.fmtDateTime(ev.starts_at);
-        const sameDay = s.toDateString() === e.toDateString();
-        const time = new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' });
-        return sameDay ? `${Ui.fmtDateTime(ev.starts_at)} to ${time.format(e)}` : `${Ui.fmtDateTime(ev.starts_at)} to ${Ui.fmtDateTime(ev.ends_at)}`;
+        const sameDay = Ui.dayKey(ev.starts_at) === Ui.dayKey(ev.ends_at);
+        return sameDay ? `${Ui.fmtDateTime(ev.starts_at)} to ${Ui.fmtTime(ev.ends_at)} (CAT)` : `${Ui.fmtDateTime(ev.starts_at)} to ${Ui.fmtDateTime(ev.ends_at)} (CAT)`;
     }
 
     const stars = (n) => `<span class="text-action" role="img" aria-label="${n} out of 5 stars">${'★'.repeat(n)}${'☆'.repeat(5 - n)}</span>`;
@@ -174,9 +173,17 @@ $(function () {
     function render() {
         const img = ev.metadata && ev.metadata.image_url;
         const mapHref = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(ev.location || '');
+        const isOnline = /^(online|virtual|zoom|webinar)/i.test((ev.location || '').trim()); // no map for online events
 
         const hero = img
-            ? `<img src="${Ui.esc(img)}" alt="Photo for ${Ui.esc(ev.title)}" class="detail-img h-64 w-full rounded-2xl object-cover sm:h-96">`
+            ? `<button type="button" id="open-image" class="group relative block w-full overflow-hidden rounded-2xl" aria-label="Enlarge the image for ${Ui.esc(ev.title)}">
+                    ${Ui.mediaImg(img, '', 'h-72 w-full sm:h-[30rem]', 'detail-img')}
+                    <span class="absolute bottom-3 right-3 rounded-full bg-navy/80 px-3 py-1.5 text-xs font-bold text-white group-hover:bg-navy" aria-hidden="true">Click to enlarge</span>
+               </button>
+               <dialog id="img-dialog" class="w-[calc(100%-1rem)] max-w-3xl rounded-2xl p-3 backdrop:bg-navy/80" aria-label="Image for ${Ui.esc(ev.title)}">
+                    <img src="${Ui.esc(img)}" alt="Full image for ${Ui.esc(ev.title)}" class="max-h-[80vh] w-full object-contain">
+                    <div class="mt-3 flex justify-end"><button type="button" id="img-close" class="rounded-xl bg-navy px-5 py-2.5 text-sm font-bold text-white hover:bg-navy-800">Close</button></div>
+               </dialog>`
             : '<div class="flex h-48 w-full items-center justify-center rounded-2xl bg-navy text-brand sm:h-64" aria-hidden="true"><svg viewBox="0 0 24 24" class="h-16 w-16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></div>';
 
         $root.removeAttr('aria-busy').html(`
@@ -203,7 +210,7 @@ $(function () {
                         <div>
                             <p class="text-xs font-bold uppercase tracking-wide text-muted">Where</p>
                             <p class="mt-1 text-sm font-semibold">${Ui.esc(ev.location || 'To be announced')}</p>
-                            ${ev.location ? `<a href="${mapHref}" target="_blank" rel="noopener noreferrer" class="mt-1 inline-block text-sm font-bold text-action hover:underline">Open in maps<span class="sr-only"> (opens in a new tab)</span> ↗</a>` : ''}
+                            ${ev.location && !isOnline ? `<a href="${mapHref}" target="_blank" rel="noopener noreferrer" class="mt-1 inline-block text-sm font-bold text-action hover:underline">Open in maps<span class="sr-only"> (opens in a new tab)</span> ↗</a>` : ''}
                         </div>
                         <div id="actions">${actionsHtml()}</div>
                     </div>
@@ -288,6 +295,11 @@ $(function () {
                 err.status === 409 ? 'You have already left feedback for this event. Use "Edit your feedback" to change it.' : err.message);
         }
     });
+
+    // Enlarge the event image in a dialog (click the image, Close button, backdrop click or Esc)
+    $root.on('click', '#open-image', () => document.getElementById('img-dialog').showModal());
+    $root.on('click', '#img-close', () => document.getElementById('img-dialog').close());
+    $root.on('click', '#img-dialog', function (e) { if (e.target === this) this.close(); });
 
     // Broken hero image -> navy placeholder
     document.getElementById('detail').addEventListener('error', (e) => {

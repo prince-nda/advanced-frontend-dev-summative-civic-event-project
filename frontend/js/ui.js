@@ -65,13 +65,47 @@ const Ui = (() => {
             .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
 
+    // Rwanda: Central Africa Time (UTC+2, no daylight saving), day-month-year dates.
+    // Events are shown in Rwanda time for every visitor so a date never shifts with the device's time zone.
+    const TZ = 'Africa/Kigali';
+    const LOCALE = 'en-GB';
+
     function fmtDateTime(iso) {
         if (!iso) return 'Date to be announced';
         const d = new Date(iso);
         if (isNaN(d)) return 'Date to be announced';
-        return new Intl.DateTimeFormat(undefined, {
-            weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit',
+        return new Intl.DateTimeFormat(LOCALE, {
+            weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: TZ,
         }).format(d);
+    }
+
+    // "2025-11-21" in Rwanda time (used to compare days)
+    function dayKey(iso) {
+        return new Intl.DateTimeFormat('en-CA', { timeZone: TZ }).format(new Date(iso));
+    }
+    function fmtToday() {
+        return new Intl.DateTimeFormat(LOCALE, { weekday: 'long', day: 'numeric', month: 'long', timeZone: TZ }).format(new Date());
+    }
+    function hourNow() {
+        return Number(new Intl.DateTimeFormat(LOCALE, { hour: 'numeric', hour12: false, timeZone: TZ }).format(new Date())) % 24;
+    }
+    function fmtTime(iso) {
+        return new Intl.DateTimeFormat(LOCALE, { hour: '2-digit', minute: '2-digit', timeZone: TZ }).format(new Date(iso));
+    }
+    function monthDay(iso) {
+        const d = new Date(iso);
+        return {
+            month: new Intl.DateTimeFormat(LOCALE, { month: 'short', timeZone: TZ }).format(d),
+            day: new Intl.DateTimeFormat(LOCALE, { day: 'numeric', timeZone: TZ }).format(d),
+        };
+    }
+    // <input type="datetime-local"> has no time zone: treat what the admin types as Rwanda time
+    function toKigaliInput(iso) {
+        const d = new Date(iso);
+        return isNaN(d) ? '' : new Date(d.getTime() + 2 * 3600 * 1000).toISOString().slice(0, 16);
+    }
+    function fromKigaliInput(value) {
+        return new Date(value + ':00+02:00').toISOString();
     }
 
     function timeAgo(iso) {
@@ -119,8 +153,20 @@ const Ui = (() => {
 
     function fmtDate(iso) {
         const d = new Date(iso);
-        return isNaN(d) ? '' : new Intl.DateTimeFormat(undefined, { year: 'numeric', month: 'short', day: 'numeric' }).format(d);
+        return isNaN(d) ? '' : new Intl.DateTimeFormat(LOCALE, { day: 'numeric', month: 'short', year: 'numeric', timeZone: TZ }).format(d);
     }
 
-    return { toast, showFlash, setLoading, formError, esc, fmtDateTime, fmtDate, fmtDuration, timeAgo, confirm: confirmDialog };
+    // Shows a WHOLE image (portrait posters included) inside a box without cropping it:
+    // the sharp image is "contained", and a blurred copy of it fills the empty space around it.
+    // boxClass sets the size (it must give the box a height); imgClass is added to the sharp <img>.
+    function mediaImg(url, alt, boxClass, imgClass) {
+        const src = esc(url);
+        return `<div class="relative overflow-hidden bg-surface ${boxClass || ''}">
+            <img src="${src}" alt="" aria-hidden="true" loading="lazy" class="absolute inset-0 h-full w-full scale-125 object-cover opacity-50 blur-2xl">
+            <img src="${src}" alt="${esc(alt || '')}" loading="lazy" class="absolute inset-0 h-full w-full object-contain ${imgClass || ''}">
+        </div>`;
+    }
+
+    return { toast, showFlash, setLoading, formError, esc, mediaImg, fmtDateTime, fmtDate, fmtDuration, timeAgo, confirm: confirmDialog,
+        dayKey, fmtToday, hourNow, fmtTime, monthDay, toKigaliInput, fromKigaliInput };
 })();

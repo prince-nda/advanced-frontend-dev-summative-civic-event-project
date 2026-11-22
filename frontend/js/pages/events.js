@@ -77,7 +77,7 @@ $(function () {
             if (q && !((e.title || '') + ' ' + (e.description || '')).toLowerCase().includes(q)) return false;
             if (loc && e.location !== loc) return false;
             const end = new Date(e.ends_at || e.starts_at).getTime();
-            if (day) return e.starts_at && new Date(e.starts_at).toLocaleDateString('en-CA') === day;
+            if (day) return e.starts_at && Ui.dayKey(e.starts_at) === day;
             if (when === 'upcoming' && end < now) return false;
             if (when === 'past' && end >= now) return false;
             return true;
@@ -93,13 +93,14 @@ $(function () {
         const href = 'event-detail.html?id=' + encodeURIComponent(e.id);
 
         const media = img
-            ? `<img src="${Ui.esc(img)}" alt="Photo for ${Ui.esc(e.title)}" loading="lazy" class="event-img h-48 w-full object-cover">`
+            ? Ui.mediaImg(img, 'Photo for ' + e.title, 'h-48 w-full', 'event-img')
             : '<div class="flex h-48 w-full items-center justify-center bg-navy text-brand" aria-hidden="true"><svg viewBox="0 0 24 24" class="h-12 w-12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></div>';
 
+        const md = start ? Ui.monthDay(e.starts_at) : null;
         const dateChip = start
             ? `<div class="absolute left-4 top-4 rounded-xl bg-white px-3 py-2 text-center shadow-card" aria-hidden="true">
-                   <div class="text-[10px] font-extrabold uppercase tracking-wider text-action">${start.toLocaleString(undefined, { month: 'short' })}</div>
-                   <div class="text-xl font-extrabold leading-none">${start.getDate()}</div></div>`
+                   <div class="text-[10px] font-extrabold uppercase tracking-wider text-action">${md.month}</div>
+                   <div class="text-xl font-extrabold leading-none">${md.day}</div></div>`
             : '';
 
         let action = '';

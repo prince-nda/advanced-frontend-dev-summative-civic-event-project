@@ -1,7 +1,7 @@
 $(function () {
     const user = Auth.requireAdmin();
     if (!user) return;
-    Layout.mount('admin');
+    Layout.mount('events');
 
     const id = new URLSearchParams(location.search).get('id');
     const editing = !!id;
@@ -44,8 +44,8 @@ $(function () {
             $('#title').val(e.title);
             $('#description').val(e.description || '');
             $('#location').val(e.location || '');
-            $('#starts_at').val(toLocalInput(e.starts_at));
-            $('#ends_at').val(toLocalInput(e.ends_at));
+            $('#starts_at').val(Ui.toKigaliInput(e.starts_at));
+            $('#ends_at').val(Ui.toKigaliInput(e.ends_at));
             currentImageUrl = e.metadata && e.metadata.image_url;
             if (currentImageUrl) showPreview(currentImageUrl, 'Current image. Choose a new file to replace it.');
             $('#load-state').addClass('hidden').empty();
@@ -123,8 +123,8 @@ $(function () {
         fd.append('title', v.title);
         fd.append('description', v.description);
         fd.append('location', v.location);
-        fd.append('starts_at', new Date(v.starts_at).toISOString()); // sent as UTC
-        fd.append('ends_at', new Date(v.ends_at).toISOString());
+        fd.append('starts_at', Ui.fromKigaliInput(v.starts_at)); // typed as Rwanda time (UTC+2), sent as UTC
+        fd.append('ends_at', Ui.fromKigaliInput(v.ends_at));
         const file = $('#image')[0].files[0];
         if (file) fd.append('image', file); // field name expected by uploadEventImage.single('image')
 

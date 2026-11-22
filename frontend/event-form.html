@@ -41,7 +41,7 @@
 
             <div>
                 <label for="location" class="mb-2 block text-sm font-bold">Location <span class="text-action" aria-hidden="true">*</span></label>
-                <input id="location" name="location" type="text" required placeholder="e.g. Riverside Commons, Kigali"
+                <input id="location" name="location" type="text" required placeholder="e.g. Kimironko Market, Kigali"
                        class="w-full rounded-xl border border-line px-4 py-3.5 text-sm outline-none focus:border-action focus:ring-4 focus:ring-brand/20" aria-describedby="location-error">
                 <p id="location-error" class="mt-1.5 hidden text-sm font-medium text-red-700"></p>
             </div>
@@ -51,6 +51,7 @@
                     <label for="starts_at" class="mb-2 block text-sm font-bold">Starts <span class="text-action" aria-hidden="true">*</span></label>
                     <input id="starts_at" name="starts_at" type="datetime-local" required
                            class="w-full rounded-xl border border-line px-4 py-3.5 text-sm outline-none focus:border-action focus:ring-4 focus:ring-brand/20" aria-describedby="starts_at-error">
+                    <p class="mt-1.5 text-xs text-muted">Times are in Rwanda time (CAT, UTC+2).</p>
                     <p id="starts_at-error" class="mt-1.5 hidden text-sm font-medium text-red-700"></p>
                 </div>
                 <div>
@@ -71,7 +72,7 @@
                 <p id="image-error" class="mt-1.5 hidden text-sm font-medium text-red-700"></p>
 
                 <figure id="preview-wrap" class="mt-4 hidden">
-                    <img id="preview" src="" alt="Preview of the selected event image" class="max-h-64 w-full rounded-xl border border-line object-cover">
+                    <img id="preview" src="" alt="Preview of the selected event image" class="max-h-96 w-full rounded-xl border border-line bg-surface object-contain">
                     <figcaption id="preview-caption" class="mt-2 text-xs text-muted"></figcaption>
                 </figure>
             </div>
