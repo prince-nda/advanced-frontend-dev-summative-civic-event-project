@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>About | CivicEvents</title>
+    <meta name="description" content="Learn what CivicEvents offers and how it is built to be accessible for everyone.">
+    <link rel="icon" type="image/svg+xml" href="assets/civicevents-icon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script src="js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="min-h-screen bg-white font-sans text-navy">
+    <div id="app-header"></div>
+
+    <main id="main">
+        <section class="bg-navy text-white">
+            <div class="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:py-24">
+                <p class="text-xs font-bold uppercase tracking-[0.18em] text-white/80">About CivicEvents</p>
+                <h1 class="mt-5 text-4xl font-extrabold leading-tight tracking-tight sm:text-6xl">A more accessible city starts with <span class="text-brand">all of us.</span></h1>
+                <p class="mt-6 max-w-2xl text-lg leading-relaxed text-white/75">CivicEvents is a community portal for Rwanda, where residents can find what is happening in their city, stay informed and take part, whatever device or ability they bring.</p>
+            </div>
+        </section>
+
+        <div class="mx-auto max-w-4xl px-4 pt-16 sm:px-6">
+            <section aria-labelledby="what-h">
+                <h2 id="what-h" class="text-3xl font-extrabold tracking-tight">What the portal offers</h2>
+                <dl class="mt-6 divide-y divide-line rounded-2xl border border-line">
+                    <div class="p-6"><dt class="font-extrabold">Events</dt><dd class="mt-1 text-muted">Browse upcoming events, filter by date and location, register, cancel and leave feedback after you attend.</dd></div>
+                    <div class="p-6"><dt class="font-extrabold">Audio announcements</dt><dd class="mt-1 text-muted">Short spoken updates from the city that you can play, skip through and slow down or speed up.</dd></div>
+                    <div class="p-6"><dt class="font-extrabold">Captioned promos</dt><dd class="mt-1 text-muted">Videos about programs and services, with captions and a written transcript.</dd></div>
+                    <div class="p-6"><dt class="font-extrabold">Notifications</dt><dd class="mt-1 text-muted">A bell that tells you when a new event, promo or announcement is published.</dd></div>
+                </dl>
+            </section>
+
+            <section class="mt-14" aria-labelledby="roles-h">
+                <h2 id="roles-h" class="text-3xl font-extrabold tracking-tight">Two kinds of accounts</h2>
+                <div class="mt-6 grid gap-6 sm:grid-cols-2">
+                    <div class="rounded-2xl border border-line p-6"><h3 class="font-extrabold">Community members</h3><p class="mt-2 text-sm leading-relaxed text-muted">View published content, register for events, give feedback, and manage their own profile and registrations.</p></div>
+                    <div class="rounded-2xl border border-line p-6"><h3 class="font-extrabold">Administrators</h3><p class="mt-2 text-sm leading-relaxed text-muted">Publish and manage events, announcements and promos, see who registered, and enable or disable accounts.</p></div>
+                </div>
+            </section>
+
+            <section class="mt-14" aria-labelledby="acc-h2">
+                <h2 id="acc-h2" class="text-3xl font-extrabold tracking-tight">Our accessibility commitments</h2>
+                <ul class="mt-6 list-disc space-y-3 pl-6 text-muted marker:text-action">
+                    <li>Everything works with a keyboard, with a visible focus outline and skip links.</li>
+                    <li>Text and controls meet WCAG AA color contrast.</li>
+                    <li>Images have descriptions, form fields have labels and errors are announced to screen readers.</li>
+                    <li>Videos have captions and a transcript; audio can be downloaded as a fallback.</li>
+                    <li>Animations are reduced for people who ask their device for less motion.</li>
+                </ul>
+            </section>
+        </div>
+
+        <section class="mx-auto mt-20 max-w-7xl px-4 sm:px-6 lg:px-8" aria-labelledby="cta-h">
+            <div class="relative overflow-hidden rounded-3xl bg-navy px-6 py-16 text-center text-white sm:px-12">
+                <div class="absolute -left-24 top-1/3 h-72 w-72 rounded-full border border-white/10" aria-hidden="true"></div>
+                <div class="absolute -right-24 top-1/4 h-72 w-72 rounded-full border border-white/10" aria-hidden="true"></div>
+                <p class="relative text-xs font-bold uppercase tracking-[0.18em] text-white/80">Belong to something local</p>
+                <h2 id="cta-h" class="relative mx-auto mt-4 max-w-2xl text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">Your next great city story starts here.</h2>
+                <p class="relative mt-4 text-white/70">Discover an event. Meet a neighbor. Add your voice to the community.</p>
+                <div class="relative mt-8 flex flex-wrap justify-center gap-3">
+                    <a href="events.html" class="rounded-xl bg-action px-6 py-4 text-sm font-bold text-white shadow-glow hover:bg-action-dark">Find your next event</a>
+                    <a href="signup.html" class="rounded-xl border border-white/30 px-6 py-4 text-sm font-bold hover:bg-white/10">Create free account</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    <div id="app-footer"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/layout.js"></script>
+    <script src="js/public-layout.js"></script>
+    <script>PublicLayout.mount('about');</script>
+</body>
+</html>
