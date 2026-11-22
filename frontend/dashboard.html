@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Overview | CivicEvents</title>
+    <link rel="icon" type="image/svg+xml" href="assets/civicevents-icon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script src="js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="min-h-screen bg-white font-sans text-navy">
+    <div id="app-header"></div>
+
+    <main id="main" class="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
+        <p id="today" class="text-xs font-bold uppercase tracking-[0.16em] text-action"></p>
+        <h1 id="greeting" class="mt-2 text-4xl font-extrabold tracking-tight sm:text-5xl">Welcome back.</h1>
+        <p class="mt-2 text-muted">Your city has plenty in store for you this week.</p>
+
+        <div id="state" class="hidden"></div>
+
+        <section id="stats" class="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4" aria-label="Your numbers"></section>
+
+        <div class="mt-6 grid gap-6 xl:grid-cols-3">
+            <section class="rounded-2xl border border-line bg-white p-6 shadow-card xl:col-span-2" aria-labelledby="next-h">
+                <div class="flex items-end justify-between gap-3">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-[0.16em] text-action">Up next</p>
+                        <h2 id="next-h" class="mt-1 text-xl font-extrabold">Your weekend starts here</h2>
+                    </div>
+                    <a href="my-registrations.html" class="border-b-2 border-navy pb-0.5 text-sm font-bold hover:text-action">All registrations →</a>
+                </div>
+                <div id="next" class="mt-5"></div>
+            </section>
+
+            <section class="rounded-2xl border border-line bg-white p-6 shadow-card" aria-labelledby="act-h">
+                <div class="flex items-center justify-between">
+                    <h2 id="act-h" class="text-xl font-extrabold">Recent activity</h2>
+                    <button id="view-all-notifs" type="button" class="text-xs font-bold text-action hover:underline">View all</button>
+                </div>
+                <ul id="activity" class="mt-4 divide-y divide-line"></ul>
+            </section>
+        </div>
+
+        <section class="mt-10" aria-labelledby="explore-h">
+            <div class="flex items-end justify-between gap-3">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-[0.16em] text-action">Picked for you</p>
+                    <h2 id="explore-h" class="mt-1 text-2xl font-extrabold">Keep exploring</h2>
+                </div>
+                <a href="events.html" class="border-b-2 border-navy pb-0.5 text-sm font-bold hover:text-action">View all →</a>
+            </div>
+            <div id="explore" class="mt-5 grid gap-5 md:grid-cols-2"></div>
+        </section>
+    </main>
+
+    <div id="app-footer"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/layout.js"></script>
+    <script src="js/pages/dashboard.js"></script>
+</body>
+</html>
