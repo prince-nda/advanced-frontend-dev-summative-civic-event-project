@@ -73,7 +73,7 @@ const Auth = (() => {
     function url(page) {
         return (location.pathname.includes('/admin/') ? '../' : '') + page;
     }
-    const homeUrl = () => url(isAdmin() ? 'admin/dashboard.html' : 'events.html');
+    const homeUrl = () => url(isAdmin() ? 'admin/dashboard.html' : 'dashboard.html');
 
     /* ---------- one-shot messages across redirects ---------- */
 
