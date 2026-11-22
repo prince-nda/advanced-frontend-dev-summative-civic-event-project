@@ -55,8 +55,15 @@ $(function () {
                 throw { message: 'Your account has been disabled. Please contact an administrator.' };
             }
 
-            Auth.setFlash('success', `Welcome back, ${res.data.user.full_name}!`);
-            location.href = Auth.homeUrl(); // admin -> dashboard, user -> events
+            // Welcome dialog (as in the design), then on to the role's home: admin dashboard / user overview
+            const dest = Auth.homeUrl();
+            const dlg = document.getElementById('welcome-dialog');
+            $('#wd-h').text(`Welcome back, ${res.data.user.full_name.split(' ')[0]}!`);
+            $('#wd-go').attr('href', dest).text(Auth.isAdmin() ? 'Go to the admin dashboard →' : 'Go to my dashboard →');
+            dlg.addEventListener('close', () => { location.href = dest; });
+            Ui.setLoading($btn, false);
+            dlg.showModal();
+            $('#wd-go').trigger('focus');
         } catch (err) {
             Auth.clear();
             Ui.setLoading($btn, false);

@@ -15,35 +15,28 @@
 <body class="min-h-screen bg-white font-sans text-navy">
     <a href="#main" class="skip-link">Skip to sign in form</a>
 
-    <div class="grid min-h-screen lg:grid-cols-2">
+    <div class="relative min-h-screen overflow-hidden bg-navy">
+        <!-- Background photo + navy overlay (decorative) -->
+        <img src="assets/auth-bg.jpg" alt="" class="absolute inset-0 h-full w-full object-cover" aria-hidden="true">
+        <div class="absolute inset-0 bg-navy/85" aria-hidden="true"></div>
+        <div class="absolute -right-32 top-16 h-96 w-96 rounded-full border border-white/10" aria-hidden="true"></div>
+        <div class="absolute -bottom-24 -left-24 h-80 w-80 rounded-full border border-white/10" aria-hidden="true"></div>
 
-        <!-- Brand panel (decorative; hidden on small screens) -->
-        <aside class="relative hidden overflow-hidden bg-navy p-12 lg:flex lg:flex-col lg:justify-between" aria-hidden="true">
-            <div class="absolute -right-32 top-1/3 h-96 w-96 rounded-full border border-white/10"></div>
-            <div class="absolute -left-24 bottom-10 h-72 w-72 rounded-full border border-white/10"></div>
-
-            <div class="relative flex items-center gap-3">
+        <header class="relative z-10 flex items-center justify-between px-6 py-6 sm:px-10">
+            <a href="index.html" class="flex items-center gap-2.5 text-white" aria-label="CivicEvents home">
                 <img src="assets/civicevents-icon.svg" alt="" class="h-9 w-9 rounded-lg bg-white p-1">
-                <span class="text-xl font-bold text-white">CivicEvents</span>
-            </div>
+                <span class="text-xl font-bold">CivicEvents</span>
+            </a>
+            <a href="index.html" class="flex h-11 w-11 items-center justify-center rounded-full border border-white/40 text-xl text-white hover:bg-white/10" aria-label="Close and go back to the home page">✕</a>
+        </header>
 
-            <div class="relative max-w-xl">
-                <p class="mb-5 text-xs font-bold uppercase tracking-[0.18em] text-white/80">Discover. Connect. Participate.</p>
-                <h2 class="text-5xl font-extrabold leading-[1.05] tracking-tight text-white xl:text-6xl">Feel closer to the city you call home.</h2>
-                <p class="mt-6 max-w-md text-base leading-relaxed text-white/70">Find events, stay informed with community announcements and connect with what is happening around you.</p>
-            </div>
-        </aside>
+        <main id="main" class="relative z-10 flex items-center justify-center px-4 pb-14 pt-2">
+            <div class="w-full max-w-md rounded-3xl bg-white p-8 shadow-2xl sm:p-10">
+                <a href="index.html" class="mb-6 flex justify-center" aria-label="CivicEvents home"><img src="assets/civicevents-primary-logo.svg" alt="CivicEvents" class="h-9 w-auto"></a>
 
-        <!-- Form -->
-        <main id="main" class="flex items-center justify-center px-6 py-12 sm:px-12">
-            <div class="w-full max-w-md">
-                <a href="login.html" class="mb-10 inline-block" aria-label="CivicEvents home">
-                    <img src="assets/civicevents-primary-logo.svg" alt="CivicEvents" class="h-10 w-auto">
-                </a>
-
-                <p class="text-xs font-bold uppercase tracking-[0.16em] text-action">Welcome back</p>
-                <h1 class="mt-2 text-4xl font-extrabold tracking-tight">Sign in to your city</h1>
-                <p class="mt-3 text-muted">Your community is waiting. Let's get you back in.</p>
+                <p class="text-center text-xs font-bold uppercase tracking-[0.16em] text-action">Welcome back</p>
+                <h1 class="mt-2 text-center text-3xl font-extrabold tracking-tight sm:text-4xl">Sign in to your city</h1>
+                <p class="mt-3 text-center text-sm text-muted">Your community is waiting. Let's get you back in.</p>
 
                 <form id="login-form" class="mt-8 space-y-5" novalidate>
                     <div id="form-error" role="alert" class="hidden rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-800"></div>
@@ -85,6 +78,17 @@
             </div>
         </main>
     </div>
+
+
+    <!-- Welcome dialog shown after a successful sign in -->
+    <dialog id="welcome-dialog" class="w-[calc(100%-2rem)] max-w-md rounded-3xl p-0 shadow-card backdrop:bg-navy/70" aria-labelledby="wd-h">
+        <div class="p-8 text-center">
+            <span class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-action text-3xl font-bold text-white" aria-hidden="true">✓</span>
+            <h2 id="wd-h" class="mt-6 text-3xl font-extrabold tracking-tight"></h2>
+            <p class="mt-2 text-sm text-muted">You're signed in and ready to explore your city.</p>
+            <a id="wd-go" href="#" class="mt-7 flex w-full items-center justify-center gap-2 rounded-xl bg-action px-6 py-4 text-sm font-bold text-white shadow-glow hover:bg-action-dark"></a>
+        </div>
+    </dialog>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="js/config.js"></script>
