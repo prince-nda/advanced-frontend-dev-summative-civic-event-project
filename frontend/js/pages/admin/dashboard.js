@@ -35,7 +35,7 @@ $(function () {
             ['Total events', n(d.events.total_events), `${n(d.events.upcoming_events)} upcoming`],
             ['Upcoming events', n(d.events.upcoming_events), `${n(d.events.past_events)} already past`],
             ['Total users', n(d.users.total_users), `${n(d.users.inactive_users)} disabled`],
-            ['Active users', n(d.users.active_users), 'Can sign in'],
+            ['Notifications', n(d.notifications.total_notifications), 'Sent to users so far'],
             ['Registrations', n(d.registrations.total_registrations), 'Across all events'],
             ['Feedback received', n(d.feedbacks.total_feedback), 'Ratings and comments'],
             ['Promos', n(d.promos.total_promos), 'Video promos'],
