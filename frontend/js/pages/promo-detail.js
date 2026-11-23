@@ -1,12 +1,3 @@
-/**
- * pages/promo-detail.js
- * HTML5 video with captions. The API stores captions as plain text (`caption_text`), not a caption file,
- * so once the video's length is known we turn that text into a WebVTT track in the browser (spread across
- * the video by sentence length) and attach it as <track kind="captions" srclang="en" label="English" default>.
- * A Captions on/off button and the full transcript are provided for accessibility.
- *
- * GUARD: any signed-in user; unpublished promos are hidden from normal users.
- */
 $(function () {
     const user = Auth.requireAuth();
     if (!user) return;
@@ -23,6 +14,14 @@ $(function () {
             <div class="mt-6 flex justify-center gap-3">
                 ${retry ? '<button id="retry" type="button" class="rounded-xl bg-action px-5 py-3 text-sm font-bold text-white hover:bg-action-dark">Try again</button>' : ''}
                 <a href="promos.html" class="rounded-xl border border-line px-5 py-3 text-sm font-bold hover:bg-surface">Back to promos</a></div></div>`);
+    }
+
+    /* ---------- language tag: caption text may start with [rw], [en], [fr], [sw] ... (default English) ---------- */
+    const LANGS = { en: 'English', rw: 'Kinyarwanda', fr: 'French', sw: 'Swahili' };
+    function parseCaption(raw) {
+        const m = /^\s*\[([a-z]{2,3})\]\s*/i.exec(raw || '');
+        const code = m ? m[1].toLowerCase() : 'en';
+        return { lang: code, label: LANGS[code] || code.toUpperCase(), text: m ? raw.slice(m[0].length) : (raw || '') };
     }
 
     /* ---------- caption text -> WebVTT ---------- */
@@ -57,13 +56,13 @@ $(function () {
         return 'WEBVTT\n\n' + body.join('\n');
     }
 
-    function addCaptions(video, text) {
+    function addCaptions(video, cap) {
         const make = () => {
             if (video.querySelector('track')) return; // only once
             const dur = isFinite(video.duration) && video.duration > 0 ? video.duration : 60;
-            const url = URL.createObjectURL(new Blob([buildVtt(text, dur)], { type: 'text/vtt' }));
+            const url = URL.createObjectURL(new Blob([buildVtt(cap.text, dur)], { type: 'text/vtt' }));
             const track = document.createElement('track');
-            track.kind = 'captions'; track.srclang = 'en'; track.label = 'English'; track.src = url; track.default = true;
+            track.kind = 'captions'; track.srclang = cap.lang; track.label = cap.label; track.src = url; track.default = true;
             video.appendChild(track);
             track.track.mode = 'showing'; // captions are on by default
 
@@ -79,6 +78,7 @@ $(function () {
 
     /* ---------- render ---------- */
     function render(p) {
+        const cap = parseCaption(p.caption_text);
         document.title = `${p.title} | CivicEvents`;
         $root.removeAttr('aria-busy').html(`
             <p class="text-xs font-bold uppercase tracking-[0.16em] text-action">Promo video</p>
@@ -103,12 +103,12 @@ $(function () {
 
             <section class="mt-8" aria-labelledby="tr-h">
                 <h2 id="tr-h" class="text-xl font-extrabold">Transcript</h2>
-                <p class="mt-3 whitespace-pre-line rounded-xl bg-surface p-5 text-sm leading-relaxed">${Ui.esc(p.caption_text || 'No transcript has been provided.')}</p>
+                <p lang="${Ui.esc(cap.lang)}" class="mt-3 whitespace-pre-line rounded-xl bg-surface p-5 text-sm leading-relaxed">${Ui.esc(cap.text.replace(/^\s*WEBVTT[^\n]*\n+/i, '').replace(/^\d+\s*$/gm, '').replace(/^\d{1,2}:\d{2}.*-->.*$/gm, '').replace(/\n{2,}/g, '\n').trim() || 'No transcript has been provided.')}</p>
             </section>`);
 
         const video = document.getElementById('video');
         video.addEventListener('error', () => $('#video-error').text('This video could not be played. Try downloading it instead.').removeClass('hidden'));
-        if (p.caption_text) addCaptions(video, p.caption_text);
+        if (cap.text.trim()) addCaptions(video, cap);
     }
 
     async function load() {
