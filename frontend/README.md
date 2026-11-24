@@ -1,5 +1,3 @@
-# UI Implementation
-
 # CivicEvents+ Frontend
 
 An accessible, responsive city events and services portal. This is the **frontend only**. It consumes the
